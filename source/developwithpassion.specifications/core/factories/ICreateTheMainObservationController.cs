@@ -1,3 +1,4 @@
+using developwithpassion.specifications.faking;
 using Machine.Fakes;
 
 namespace developwithpassion.specifications.core.factories
@@ -42,8 +43,25 @@ namespace developwithpassion.specifications.core.factories
                 sut_factory_provider = new SUTFactoryProvider(),
                 test_state_factory = new TestStateFactory(),
                 dependency_registry_factory = new DependencyRegistryFactory(),
-                non_ctor_dependency_visitor_factory = new NonCtorDependencyVisitorFactory()
+                non_ctor_dependency_visitor_factory = new DisabledNonCtorDependencyVisitorFactory()
             };
         }
     }
+
+    public class DisabledNonCtorDependencyVisitorFactory : ICreateTheNonCtorDependencyVisitor
+    {
+        public IUpdateNonCtorDependenciesOnAnItem create(IManageTheDependenciesForASUT dependency_registry)
+        {
+            return new DisabledNonCtorDependencySetter();
+        }
+    }
+
+    public class DisabledNonCtorDependencySetter : IUpdateNonCtorDependenciesOnAnItem
+    {
+        public void update(object item)
+        {
+            return;//do nothing
+        }
+    }
+
 }
